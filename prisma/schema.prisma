@@ -12,3 +12,93 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Patients {
+  id         String    @id @default(cuid())
+  name       String
+  last       String
+  birthdate  String?
+  email      String    @unique
+  age        Int
+  gender     String
+  address    String?
+  phone      String?
+  doctors    Doctors[]
+  medicalCenters Medical_Center[]
+  clinicalHistories Clinical_Histories[]
+  appointments   Appointment[]
+  medicines  Medicines[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt    
+}
+
+model Doctors {
+  id         Int       @id @default(autoincrement())
+  name       String
+  last       String
+  specialty  String
+  phone      String?
+  email      String    @unique
+  age        Int?
+  patients   Patients[]
+  appointments  Appointment[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt    
+}
+
+model Medical_Center {
+  id         Int       @id @default(autoincrement())
+  name       String
+  address    String
+  phone      String? 
+  patients   Patients[]
+  appointments Appointment[]
+}
+
+model Clinical_Histories {
+  id                     String       @id @default(cuid())
+  fullname               String
+  consultation_date      String   
+  diagnosis              String
+  treatment              String
+  observations           String
+  userEmail              String
+  user                   Patients     @relation(fields: [userEmail], references: [email])
+  appointment            Appointment  @relation(fields: [appointmentId], references: [id])
+  appointmentId          Int @unique
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt    
+}
+
+model Appointment {
+  id              Int       @id @default(autoincrement())
+  patientId       String
+  doctorId        Int
+  centermId       Int
+  phone           String 
+  doctEmail       String
+  doct            Doctors   @relation(fields: [doctEmail], references: [email])
+  ownerEmail      String
+  owner           Patients  @relation(fields: [ownerEmail], references: [email])
+  medicalCenter   Medical_Center    @relation(fields: [medicalCenterId], references: [id])
+  medicalCenterId Int
+  clinicalhistorie   Clinical_Histories?
+  dateandhour     DateTime
+  state           Status
+}
+
+model Medicines {
+  id              Int       @id @default(autoincrement())
+  name            String
+  decription      String
+  posology        String
+  patients        Patients[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt    
+}
+
+enum Status {
+  CONFIRM
+  CANCEL 
+  POSTPONED
+}

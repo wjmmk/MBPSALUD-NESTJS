@@ -12,7 +12,7 @@ async function bootstrap() {
   */
   const config = new DocumentBuilder()
   .setTitle('Project example')
-  .setDescription('API documentation and description')
+  .setDescription('API documentation and description.')
   .setVersion('1.0')
   .addTag('MBPSALUD')
   .build();

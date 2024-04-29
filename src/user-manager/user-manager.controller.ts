@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserManagerService } from './user-manager.service';
 import { CreateUserManagerDto } from './dto/create-user-manager.dto';
 import { UpdateUserManagerDto } from './dto/update-user-manager.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('user-manager')
+@ApiTags('User-manager')
 export class UserManagerController {
   constructor(private readonly userManagerService: UserManagerService) {}
 
